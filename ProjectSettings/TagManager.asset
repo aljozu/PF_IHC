@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - JumpScare001
+  - RoomLight
+  - SamplesInfoPanel
+  - AnkleGrabber
   layers:
   - Default
   - TransparentFX
