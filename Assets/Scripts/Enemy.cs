@@ -1,36 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Enemy : MonoBehaviour
+public class FollowPlayer : MonoBehaviour
 {
+    public Transform player;
+    private NavMeshAgent navMeshAgent;
+    public float followDistance = 10f; // Distance within which the enemy will follow the player
 
-    private OVRCameraRig cameraRig;
-    private NavMeshAgent nav;
-    public float maxRaycastDistance = 10f;
-    
-
-    // Start is called before the first frame update
     void Start()
     {
-        cameraRig = FindObjectOfType<OVRCameraRig>();
-        nav = GetComponent<NavMeshAgent>();
+        // Get the NavMeshAgent component
+        navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        Ray ray = new Ray(cameraRig.centerEyeAnchor.position, cameraRig.centerEyeAnchor.forward);
-        RaycastHit hit;
+        // Calculate the direction vector from the enemy to the player
+        Vector3 direction = player.position - transform.position;
+        float distance = direction.magnitude;
 
-        // Verifica si el rayo intersecta con el prefab
-        if (Physics.Raycast(ray, out hit, maxRaycastDistance))
+        // If the player is within the follow distance, the enemy will follow the player
+        if (distance < followDistance)
         {
-            if (hit.collider.gameObject.CompareTag("AnkleGrabber")) // Reemplaza "PrefabTag" con el tag del prefab que quieres detectar
-            {
-                nav.destination = cameraRig.centerEyeAnchor.position;
-            }
+            // Set the NavMeshAgent's destination to the player's position
+            navMeshAgent.SetDestination(player.position);
+            // Resume the NavMeshAgent
+            navMeshAgent.isStopped = false;
+        }
+        else
+        {
+            // Stop the NavMeshAgent
+            navMeshAgent.isStopped = true;
         }
     }
 }
