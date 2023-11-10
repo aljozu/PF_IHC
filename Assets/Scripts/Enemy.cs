@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.XR;
 
 public class FollowPlayer : MonoBehaviour
 {
@@ -32,5 +33,25 @@ public class FollowPlayer : MonoBehaviour
             // Stop the NavMeshAgent
             navMeshAgent.isStopped = true;
         }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        // Check if the collided object is the player
+        if (collision.gameObject.transform == player)
+        {
+            // Trigger vibration on both controllers
+            OVRInput.SetControllerVibration(1, 1, OVRInput.Controller.LTouch);
+            OVRInput.SetControllerVibration(1, 1, OVRInput.Controller.RTouch);
+
+            // Stop the vibration after a short delay
+            Invoke("StopVibration", 0.5f);
+        }
+    }
+
+    void StopVibration()
+    {
+        OVRInput.SetControllerVibration(0, 0, OVRInput.Controller.LTouch);
+        OVRInput.SetControllerVibration(0, 0, OVRInput.Controller.RTouch);
     }
 }

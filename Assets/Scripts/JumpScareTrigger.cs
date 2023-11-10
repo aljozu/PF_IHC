@@ -24,7 +24,7 @@ public class JumpScareTrigger : MonoBehaviour
         // Verifica si el rayo intersecta con el prefab
         if (Physics.Raycast(ray, out hit, maxRaycastDistance))
         {
-            if (hit.collider.gameObject.CompareTag("JumpScare001")) // Reemplaza "PrefabTag" con el tag del prefab que quieres detectar
+            if (hit.collider.gameObject.CompareTag(this.tag)) // Reemplaza "PrefabTag" con el tag del prefab que quieres detectar
             {
                 JumpScareAnimation.Play();
                 if(JumpScareAudio != null)

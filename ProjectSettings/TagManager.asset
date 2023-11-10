@@ -8,6 +8,7 @@ TagManager:
   - RoomLight
   - SamplesInfoPanel
   - AnkleGrabber
+  - Manequin
   layers:
   - Default
   - TransparentFX
