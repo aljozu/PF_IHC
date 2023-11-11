@@ -19,6 +19,15 @@ public class FollowPlayer : MonoBehaviour
         // Calculate the direction vector from the enemy to the player
         Vector3 direction = player.position - transform.position;
         float distance = direction.magnitude;
+        if (distance <= 4f)
+        {
+            // Trigger vibration on both controllers
+            OVRInput.SetControllerVibration(1, 1, OVRInput.Controller.LTouch);
+            OVRInput.SetControllerVibration(1, 1, OVRInput.Controller.RTouch);
+
+            // Stop the vibration after a short delay
+            Invoke("StopVibration", 0.5f);
+        }
 
         // If the player is within the follow distance, the enemy will follow the player
         if (distance < followDistance)
@@ -32,20 +41,6 @@ public class FollowPlayer : MonoBehaviour
         {
             // Stop the NavMeshAgent
             navMeshAgent.isStopped = true;
-        }
-    }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        // Check if the collided object is the player
-        if (collision.gameObject.transform == player)
-        {
-            // Trigger vibration on both controllers
-            OVRInput.SetControllerVibration(1, 1, OVRInput.Controller.LTouch);
-            OVRInput.SetControllerVibration(1, 1, OVRInput.Controller.RTouch);
-
-            // Stop the vibration after a short delay
-            Invoke("StopVibration", 0.5f);
         }
     }
 
