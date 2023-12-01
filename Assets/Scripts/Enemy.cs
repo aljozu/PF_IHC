@@ -1,17 +1,23 @@
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.XR;
 
-public class FollowPlayer : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
     public Transform player;
     private NavMeshAgent navMeshAgent;
     public float followDistance = 10f; // Distance within which the enemy will follow the player
+    public Light enemyLight; // Reference to the Light component
 
     void Start()
     {
         // Get the NavMeshAgent component
         navMeshAgent = GetComponent<NavMeshAgent>();
+
+        // Ensure the enemyLight is assigned
+        if (enemyLight == null)
+        {
+            Debug.LogError("Enemy Light not assigned in the inspector!");
+        }
     }
 
     void Update()
@@ -19,6 +25,7 @@ public class FollowPlayer : MonoBehaviour
         // Calculate the direction vector from the enemy to the player
         Vector3 direction = player.position - transform.position;
         float distance = direction.magnitude;
+
         if (distance <= 4f)
         {
             // Trigger vibration on both controllers
@@ -42,6 +49,13 @@ public class FollowPlayer : MonoBehaviour
             // Stop the NavMeshAgent
             navMeshAgent.isStopped = true;
         }
+
+        // Check if the enemy is touched by the light
+        if (enemyLight.enabled && distance <= enemyLight.range)
+        {
+            // Destroy the enemy GameObject
+            Destroy(gameObject);
+        }
     }
 
     void StopVibration()
@@ -50,3 +64,4 @@ public class FollowPlayer : MonoBehaviour
         OVRInput.SetControllerVibration(0, 0, OVRInput.Controller.RTouch);
     }
 }
+
